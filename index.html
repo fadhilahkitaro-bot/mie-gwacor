@@ -6,78 +6,73 @@
   <title>Foodie — E-Commerce Makanan</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0f1724; /* dark navy */
-      --card:#0b1320;
-      --accent:#ff6b35; /* orange */
-      --muted:#9aa4b2;
-      --glass: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg,#071226 0%, #071a2e 60%);
-      color:#e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      padding:32px;
-    }
-    .container{max-width:1200px;margin:0 auto}
+:root{
+--bg:#0f1724;
+--card:#0b1320;
+--accent:#ff6b35;
+--muted:#9aa4b2;
+--glass: rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%}
+body{
+font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+background: linear-gradient(180deg,#071226 0%, #071a2e 60%);
+color:#e6eef6;
+padding:16px;
+line-height:1.5;
+}
+.container{max-width:1200px;margin:0 auto;width:100%}
 
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-    .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ffb199);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081226}
-    h1{font-size:20px;margin:0}
-    p.lead{margin:0;color:var(--muted)}
 
-    .search-wrap{display:flex;gap:12px;align-items:center}
-    .search{background:var(--glass);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.03)}
-    .search input{background:transparent;border:0;outline:none;color:inherit}
-    .btn{background:var(--accent);color:#081226;padding:10px 14px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.brand{display:flex;gap:14px;align-items:center;flex:1}
+.logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ffb199);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081226;flex-shrink:0}
+h1{font-size:20px;margin:0}
+p.lead{margin:0;color:var(--muted);font-size:14px}
 
-    /* hero */
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-bottom:28px}
-    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:16px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
-    .hero h2{margin:0 0 8px;font-size:28px}
-    .hero p{margin:0;color:var(--muted)}
 
-    /* categories */
-    .cats{display:flex;gap:10px;margin:18px 0}
-    .cat{padding:8px 12px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
-    .cat.active{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
+.search-wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:220px;background:var(--glass);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.03)}
+.search input{flex:1;min-width:120px;background:transparent;border:0;outline:none;color:inherit;font-size:14px}
+.btn{background:var(--accent);color:#081226;padding:10px 14px;border-radius:10px;border:0;font-weight:600;cursor:pointer;flex-shrink:0}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
 
-    /* grid */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease}
-    .card:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
-    .thumb{height:160px;border-radius:10px;background-size:cover;background-position:center;margin-bottom:12px}
-    .meta{display:flex;align-items:center;justify-content:space-between}
-    .title{font-weight:700}
-    .desc{color:var(--muted);font-size:13px;margin-top:6px}
-    .price{font-weight:800}
-    .tag{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.35);padding:6px 8px;border-radius:8px;font-size:12px}
 
-    .controls{display:flex;gap:8px;margin-top:12px}
-    .qty{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);padding:6px;border-radius:8px}
-    .qty button{background:transparent;border:0;color:var(--muted);font-weight:700;cursor:pointer}
+.hero{display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start;margin-bottom:28px}
+.hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:16px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+.hero h2{margin:0 0 8px;font-size:24px}
+.hero p{margin:0;color:var(--muted);font-size:14px}
 
-    footer{margin-top:32px;color:var(--muted);text-align:center}
 
-    /* responsive */
-    @media (max-width:880px){
-      .hero{grid-template-columns:1fr}
-      body{padding:18px}
-    }
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+.cat{padding:8px 12px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.03);cursor:pointer;font-size:14px}
+.cat.active{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
 
-    /* modal */
-    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);visibility:hidden;opacity:0;transition:opacity .18s ease}
-    .modal.open{visibility:visible;opacity:1}
-    .modal-card{width:min(720px,95%);background:linear-gradient(180deg,#071226,#071a2e);padding:18px;border-radius:12px}
 
-    /* empty state */
-    .empty{padding:40px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+.thumb{width:100%;height:160px;border-radius:10px;background-size:cover;background-position:center;margin-bottom:12px}
+.meta{display:flex;flex-direction:column;gap:4px}
+.title{font-weight:700;font-size:16px}
+.desc{color:var(--muted);font-size:13px}
+.price{font-weight:800;margin-top:6px}
+.tag{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.35);padding:6px 8px;border-radius:8px;font-size:12px}
 
-  </style>
+
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.qty{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);padding:6px 10px;border-radius:8px;font-size:14px}
+.qty button{background:transparent;border:0;color:var(--muted);font-weight:700;cursor:pointer;font-size:16px}
+
+
+footer{margin-top:32px;color:var(--muted);text-align:center;font-size:13px}
+
+
+@media (max-width:880px){
+.hero{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
   <div class="container">

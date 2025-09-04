@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Foodie — E-Commerce Makanan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; /* dark navy */
+      --card:#0b1320;
+      --accent:#ff6b35; /* orange */
+      --muted:#9aa4b2;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071226 0%, #071a2e 60%);
+      color:#e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      padding:32px;
+    }
+    .container{max-width:1200px;margin:0 auto}
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ffb199);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081226}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted)}
+
+    .search-wrap{display:flex;gap:12px;align-items:center}
+    .search{background:var(--glass);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.03)}
+    .search input{background:transparent;border:0;outline:none;color:inherit}
+    .btn{background:var(--accent);color:#081226;padding:10px 14px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    /* hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-bottom:28px}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:16px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    .hero h2{margin:0 0 8px;font-size:28px}
+    .hero p{margin:0;color:var(--muted)}
+
+    /* categories */
+    .cats{display:flex;gap:10px;margin:18px 0}
+    .cat{padding:8px 12px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .cat.active{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
+
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease}
+    .card:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .thumb{height:160px;border-radius:10px;background-size:cover;background-position:center;margin-bottom:12px}
+    .meta{display:flex;align-items:center;justify-content:space-between}
+    .title{font-weight:700}
+    .desc{color:var(--muted);font-size:13px;margin-top:6px}
+    .price{font-weight:800}
+    .tag{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.35);padding:6px 8px;border-radius:8px;font-size:12px}
+
+    .controls{display:flex;gap:8px;margin-top:12px}
+    .qty{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);padding:6px;border-radius:8px}
+    .qty button{background:transparent;border:0;color:var(--muted);font-weight:700;cursor:pointer}
+
+    footer{margin-top:32px;color:var(--muted);text-align:center}
+
+    /* responsive */
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr}
+      body{padding:18px}
+    }
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);visibility:hidden;opacity:0;transition:opacity .18s ease}
+    .modal.open{visibility:visible;opacity:1}
+    .modal-card{width:min(720px,95%);background:linear-gradient(180deg,#071226,#071a2e);padding:18px;border-radius:12px}
+
+    /* empty state */
+    .empty{padding:40px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);text-align:center}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="" alt="">
+        <div>
+          <h1>Mie Gwacor — Makanan Online</h1>
+          <p class="lead">Pilihan makanan enak, cepat diantarkan — pesan lewat WhatsApp.</p>
+        </div>
+      </div>
+      <div class="search-wrap">
+        <div class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6"></circle></svg>
+          <input id="q" placeholder="Cari: Mie Gwacor..." oninput="filterProducts()">
+        </div>
+        <button class="btn ghost" id="cartPreviewBtn" onclick="openCart()">Keranjang</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <h2>Menu Favorit Hari Ini</h2>
+        <p>Pilih menu, atur jumlah, lalu tekan "Pesan via WhatsApp" — pesan akan otomatis berisi ringkasan pesanan siap dikirim ke nomor Anda. Dan jangan lupa lihat lagi pesanan anda takut ada kesalahan di urutan LEVEL nya.</p>
+        <div class="cats" id="cats"></div>
+        <div style="margin-top:12px" id="productCount" class="lead"></div>
+      </div>
+
+      <div class="hero-card">
+        <h3>Ringkasan Cepat</h3>
+        <p class="desc">Isi keranjang, lalu klik tombol hijau di bawah untuk membuka WhatsApp dengan pesan terisi otomatis.</p>
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Items:</strong><span id="summaryItems">0</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><strong>Total:</strong><span id="summaryTotal">Rp0</span></div>
+          <div style="margin-top:14px;display:flex;gap:8px">
+            <button class="btn" id="orderBtn" onclick="orderNow()">Pesan via WhatsApp</button>
+            <button class="btn ghost" onclick="clearCart()">Kosongkan</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <div id="grid" class="grid"></div>
+    </main>
+
+    <div id="modal" class="modal" onclick="closeModal(event)">
+      <div class="modal-card" onclick="event.stopPropagation()">
+        <div id="modalContent"></div>
+        <div style="display:flex;justify-content:flex-end;margin-top:12px">
+          <button class="btn ghost" onclick="closeModal()">Tutup</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>© 2025 Foodie — Buat tampilanmu lebih personal dengan mengganti gambar dan nomor WhatsApp.</footer>
+  </div>
+
+  <script>
+    /* === CONFIG === */
+    // Ganti nomor ini ke nomor WhatsApp tujuan (format internasional tanpa tanda +, contoh: 6281234567890)
+    const WHATSAPP_NUMBER = '6283823009170';
+
+    /* === SAMPLE PRODUCTS === */
+    const products = [
+      {id:1,name:'Pangsit Goreng lvl.1(5pcs)',price:10000,category:'Pangsit Goreng',desc:'Maknyus, pangsit dengan isi daging ayam KRIUKK',img:'goreng.jpeg'},
+      {id:2,name:'Pangsit Goreng lvl.2(5pcs)',price:10000,category:'Pangsit Goreng',desc:'Maknyus, pangsit dengan isi daging ayam KRIUKK',img:'goreng.jpeg'},
+      {id:3,name:'Pangsit Goreng lvl.3(5pcs)',price:10000,category:'Pangsit Goreng',desc:'Maknyus, pangsit dengan isi daging ayam KRIUKK',img:'goreng.jpeg'},
+      {id:4,name:'Pangsit Goreng lvl.4(5pcs)',price:10000,category:'Pangsit Goreng',desc:'Maknyus, pangsit dengan isi daging ayam KRIUKK',img:'goreng.jpeg'},
+      {id:5,name:'Pangsit Goreng lvl.5(5pcs)',price:10000,category:'Pangsit Goreng',desc:'Maknyus, pangsit dengan isi daging ayam KRIUKK',img:'goreng.jpeg'},
+      {id:6,name:'Pangsit Rebus lvl.1(5pcs)',price:10000,category:'Pangsit Rebus',desc:'Maknyus, pangsit dengan isi daging ayam YUMMY',img:'rebus.jpeg'},
+      {id:7,name:'Pangsit Rebus lvl.2(5pcs)',price:10000,category:'Pangsit Rebus',desc:'Maknyus, pangsit dengan isi daging ayam YUMMY',img:'rebus.jpeg'},
+      {id:8,name:'Pangsit Rebus lvl.3(5pcs)',price:10000,category:'Pangsit Rebus',desc:'Maknyus, pangsit dengan isi daging ayam YUMMY',img:'rebus.jpeg'},
+      {id:9,name:'Pangsit Rebus lvl.4(5pcs)',price:10000,category:'Pangsit Rebus',desc:'Maknyus, pangsit dengan isi daging ayam YUMMY',img:'rebus.jpeg'},
+      {id:10,name:'Pangsit Rebus lvl.5(5pcs)',price:10000,category:'Pangsit Rebus',desc:'Maknyus, pangsit dengan isi daging ayam YUMMY',img:'rebus.jpeg'},
+      {id:3,name:'Mie Pangsit lvl.1',price:10000,category:'Mie Pangsit',desc:'Maknyus, Mie dengan pangsit YUM YUM',img:'https://source.unsplash.com/collection/190727/800x600?sig=3'},
+      {id:3,name:'Mie Pangsit lvl.2',price:10000,category:'Mie Pangsit',desc:'Maknyus, Mie dengan pangsit YUM YUM',img:'https://source.unsplash.com/collection/190727/800x600?sig=3'},
+      {id:3,name:'Mie Pangsit lvl.3',price:10000,category:'Mie Pangsit',desc:'Maknyus, Mie dengan pangsit YUM YUM',img:'https://source.unsplash.com/collection/190727/800x600?sig=3'},
+      {id:3,name:'Mie Pangsit lvl.4',price:10000,category:'Mie Pangsit',desc:'Maknyus, Mie dengan pangsit YUM YUM',img:'https://source.unsplash.com/collection/190727/800x600?sig=3'},
+      {id:3,name:'Mie Pangsit lvl.5',price:10000,category:'Mie Pangsit',desc:'Maknyus, Mie dengan pangsit YUM YUM',img:'https://source.unsplash.com/collection/190727/800x600?sig=3'},
+      {id:3,name:'Mie Original',price:7000,category:'Mie Original',desc:'Maknyus, Mie original dengan nuansa pedesaan SWIRR',img:'https://source.unsplash.com/collection/190727/800x600?sig=3'},
+    ];
+
+    let cart = {}; // {productId: quantity}
+
+    const grid = document.getElementById('grid');
+    const catsEl = document.getElementById('cats');
+    const productCount = document.getElementById('productCount');
+
+    function formatRp(v){
+      return 'Rp' + v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function renderCategories(){
+      const cats = ['Semua', ...new Set(products.map(p=>p.category))];
+      catsEl.innerHTML = '';
+      cats.forEach((c,i)=>{
+        const btn = document.createElement('button');
+        btn.className = 'cat' + (i===0? ' active':'');
+        btn.textContent = c;
+        btn.onclick = ()=>{document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));btn.classList.add('active');filterProducts()}
+        catsEl.appendChild(btn);
+      })
+    }
+
+    function renderProducts(list=products){
+      grid.innerHTML = '';
+      productCount.textContent = list.length + ' produk ditemukan';
+      if(list.length===0){grid.innerHTML = '<div class="empty">Tidak ada produk yang cocok.</div>';return}
+      list.forEach(p=>{
+        const card = document.createElement('div');card.className='card';
+        card.innerHTML = `
+          <div class="tag">${p.category}</div>
+          <div class="thumb" style="background-image:url('${p.img}')"></div>
+          <div class="meta"><div><div class="title">${p.name}</div><div class="desc">${p.desc}</div></div><div class="price">${formatRp(p.price)}</div></div>
+          <div class="controls">
+            <div class="qty">
+              <button onclick="changeQty(${p.id}, -1)">-</button>
+              <div id="q-${p.id}">${cart[p.id]||0}</div>
+              <button onclick="changeQty(${p.id}, 1)">+</button>
+            </div>
+            <button class="btn" onclick="addToCart(${p.id})">Tambah</button>
+            <button class="btn ghost" onclick="openModal(${p.id})">Detail</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      })
+    }
+
+    function changeQty(id, delta){
+      cart[id] = (cart[id]||0) + delta;
+      if(cart[id] < 0) cart[id] = 0;
+      document.getElementById('q-'+id).textContent = cart[id];
+      updateSummary();
+    }
+
+    function addToCart(id){
+      cart[id] = (cart[id]||0) + 1;
+      document.getElementById('q-'+id).textContent = cart[id];
+      updateSummary();
+      // kecilkan notifikasi visual
+      const btn = event.currentTarget;
+      btn.animate([{transform:'scale(1.0)'},{transform:'scale(0.95)'},{transform:'scale(1)'}],{duration:220});
+    }
+
+    function updateSummary(){
+      const items = Object.entries(cart).reduce((acc,[id,q])=>acc + (q>0? q:0),0);
+      const total = Object.entries(cart).reduce((acc,[id,q])=>{
+        const p = products.find(x=>x.id==id); return acc + (p? p.price * q : 0);
+      },0);
+      document.getElementById('summaryItems').textContent = items;
+      document.getElementById('summaryTotal').textContent = formatRp(total);
+    }
+
+    function openModal(id){
+      const p = products.find(x=>x.id===id);
+      const modal = document.getElementById('modal');
+      const c = document.getElementById('modalContent');
+      c.innerHTML = `
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:220px;height:160px;background-image:url('${p.img}');background-size:cover;border-radius:10px"></div>
+          <div>
+            <h3 style="margin:0">${p.name}</h3>
+            <p style="color:var(--muted)">${p.desc}</p>
+            <div style="font-weight:800;margin-top:8px">${formatRp(p.price)}</div>
+            <div style="margin-top:12px;display:flex;gap:8px"><button class="btn" onclick="addToCart(${p.id})">Tambah</button><button class="btn ghost" onclick="closeModal()">Tutup</button></div>
+          </div>
+        </div>
+      `;
+      modal.classList.add('open');
+    }
+    function closeModal(e){
+      if(e && e.target && e.target.id !== 'modal') return; // clicked internal
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    function filterProducts(){
+      const q = document.getElementById('q').value.toLowerCase().trim();
+      const activeCat = Array.from(document.querySelectorAll('.cat')).find(x=>x.classList.contains('active'))?.textContent || 'Semua';
+      let res = products.filter(p=> (activeCat==='Semua' || p.category===activeCat) && (p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)));
+      renderProducts(res);
+      updateSummary();
+    }
+
+    function clearCart(){cart = {}; document.querySelectorAll('[id^="q-"]').forEach(x=>x.textContent='0'); updateSummary();}
+
+    function openCart(){
+      // quick cart preview in modal
+      const items = Object.entries(cart).filter(([id,q])=>q>0);
+      if(items.length===0){
+        const modal = document.getElementById('modal');document.getElementById('modalContent').innerHTML = '<div class="empty">Keranjang masih kosong.</div>';modal.classList.add('open');return;
+      }
+      let html = '<h3>Keranjang Anda</h3><div style="margin-top:12px">';
+      let total=0;
+      items.forEach(([id,q])=>{
+        const p = products.find(x=>x.id==id);
+        const subtotal = p.price * q; total += subtotal;
+        html += `<div style="display:flex;justify-content:space-between;margin-bottom:8px"><div><strong>${p.name}</strong><div style="color:var(--muted);font-size:13px">${q} x ${formatRp(p.price)}</div></div><div style="text-align:right">${formatRp(subtotal)}</div></div>`;
+      });
+      html += `<div style="border-top:1px dashed rgba(255,255,255,0.04);padding-top:10px;margin-top:8px;display:flex;justify-content:space-between"><strong>Total</strong><strong>${formatRp(total)}</strong></div>`;
+      html += `<div style="margin-top:12px;display:flex;gap:8px"><button class="btn" onclick="orderNow()">Pesan via WhatsApp</button><button class="btn ghost" onclick="closeModal()">Tutup</button></div>`;
+      html += '</div>';
+      document.getElementById('modalContent').innerHTML = html; document.getElementById('modal').classList.add('open');
+    }
+
+    function orderNow(){
+      // Build message
+      const items = Object.entries(cart).filter(([id,q])=>q>0);
+      if(items.length===0){alert('Keranjang kosong. Tambahkan produk terlebih dahulu.');return}
+      let total=0; let lines = ['Halo! Saya mau pesan:\n'];
+      items.forEach(([id,q])=>{
+        const p = products.find(x=>x.id==id);
+        const subtotal = p.price * q; total += subtotal;
+        lines.push(`- ${p.name} x ${q} = ${formatRp(subtotal)}`);
+      });
+      lines.push('\nTotal: ' + formatRp(total));
+      lines.push('\nAlamat pengiriman:');
+      lines.push('\nNama:');
+      const text = encodeURIComponent(lines.join('\n'));
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+      window.open(url, '_blank');
+    }
+
+    // initial render
+    renderCategories(); renderProducts(); updateSummary();
+
+    // expose some functions for inline handlers
+    window.addToCart = addToCart; window.changeQty = changeQty; window.openModal = openModal; window.openCart = openCart; window.clearCart = clearCart; window.orderNow = orderNow; window.filterProducts = filterProducts; window.closeModal = closeModal;
+  </script>
+</body>
+</html>
